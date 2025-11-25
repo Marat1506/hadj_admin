@@ -39,6 +39,7 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 	
 	const [title, setTitle] = React.useState("");
 	const [description, setDescription] = React.useState("");
+	const [article, setArticle] = React.useState("");
 	const [categoryId, setCategoryId] = React.useState("");
 	const [subcategoryId, setSubcategoryId] = React.useState("");
 	const [mediaType, setMediaType] = React.useState<'image' | 'video'>('image');
@@ -63,6 +64,7 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 			if (item) {
 				setTitle(item.title || "");
 				setDescription(item.description || "");
+				setArticle(item.article || "");
 				setCategoryId(item.categoryId?.toString() || "");
 				setSubcategoryId(item.subcategoryId?.toString() || "");
 				setMediaType(item.mediaType || 'image');
@@ -78,6 +80,7 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 			} else {
 				setTitle("");
 				setDescription("");
+				setArticle("");
 				// Используем предзаполненные значения если они переданы
 				setCategoryId(preselectedCategoryId?.toString() || "");
 				setSubcategoryId(preselectedSubcategoryId?.toString() || "");
@@ -144,6 +147,7 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 		
 		if (!title.trim()) newErrors.title = "Название обязательно";
 		if (!description.trim()) newErrors.description = "Описание обязательно";
+		// article необязательно
 		if (!categoryId) newErrors.categoryId = "Выберите категорию";
 		if (!subcategoryId) newErrors.subcategoryId = "Выберите подкатегорию";
 		if (!item && !mediaFile) newErrors.media = "Выберите медиафайл";
@@ -161,6 +165,7 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 			const data: any = {
 				title: title.trim(),
 				description: description.trim(),
+				article: article.trim() || undefined,
 				categoryId: parseInt(categoryId),
 				subcategoryId: parseInt(subcategoryId),
 				mediaType
@@ -235,6 +240,18 @@ export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCa
 								fullWidth
 								multiline
 								rows={4}
+								disabled={isLoading}
+							/>
+							
+							<TextField
+								label="Полная статья"
+								value={article}
+								onChange={(e) => setArticle(e.target.value)}
+								error={!!errors.article}
+								helperText={errors.article || "Полный текст статьи, который будет отображаться при открытии контента"}
+								fullWidth
+								multiline
+								rows={8}
 								disabled={isLoading}
 							/>
 							
