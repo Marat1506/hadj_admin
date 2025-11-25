@@ -39,13 +39,11 @@ export function GuideSubcategoryForm({
 	const { items: categories } = useGuideCategories();
 
 	const [title, setTitle] = React.useState("");
-	const [description, setDescription] = React.useState("");
 	const [imageFile, setImageFile] = React.useState<File | null>(null);
 	const [selectedCategoryId, setSelectedCategoryId] = React.useState<number>(categoryId || 0);
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [errors, setErrors] = React.useState<{
 		title?: string;
-		description?: string;
 		image?: string;
 		categoryId?: string;
 	}>({});
@@ -56,7 +54,6 @@ export function GuideSubcategoryForm({
 		if (open) {
 			if (item) {
 				setTitle(item.title || "");
-				setDescription(item.description || "");
 				setSelectedCategoryId(item.categoryId || categoryId || 0);
 				// Показываем существующее изображение
 				if (item.image) {
@@ -69,7 +66,6 @@ export function GuideSubcategoryForm({
 				}
 			} else {
 				setTitle("");
-				setDescription("");
 				setSelectedCategoryId(categoryId || 0);
 				setPreviewSrc(getPlaceholderImage());
 			}
@@ -128,7 +124,6 @@ export function GuideSubcategoryForm({
 	const validateForm = (): boolean => {
 		const newErrors: {
 			title?: string;
-			description?: string;
 			image?: string;
 			categoryId?: string;
 		} = {};
@@ -148,7 +143,6 @@ export function GuideSubcategoryForm({
 		try {
 			const data: any = {
 				title: title.trim(),
-				description: description.trim() || undefined,
 				categoryId: selectedCategoryId,
 			};
 			if (imageFile) {
@@ -206,18 +200,6 @@ export function GuideSubcategoryForm({
 							onChange={(e) => setTitle(e.target.value)}
 							error={!!errors.title}
 							helperText={errors.title}
-							fullWidth
-							disabled={isLoading}
-						/>
-
-						<TextField
-							label="Описание"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							error={!!errors.description}
-							helperText={errors.description}
-							multiline
-							rows={3}
 							fullWidth
 							disabled={isLoading}
 						/>
