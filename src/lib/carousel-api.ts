@@ -85,32 +85,44 @@ export const carouselApi = {
 	},
 
 	async update(id: number, updateData: UpdateCarouselData): Promise<CarouselItem> {
+		console.log('🌐 carouselApi.update called:', { id, updateData: { ...updateData, image: updateData.image ? 'File object' : undefined } });
+		
 		const formData = new FormData();
 
 		if (updateData.title) {
 			formData.append("title", updateData.title);
+			console.log('📝 Added title to formData:', updateData.title);
 		}
 
 		if (updateData.link !== undefined) {
 			formData.append("link", updateData.link || "");
+			console.log('🔗 Added link to formData:', updateData.link || '(empty)');
 		}
 
 		if (updateData.image) {
 			formData.append("photo", updateData.image);
+			console.log('🖼️ Added photo to formData:', updateData.image.name, updateData.image.size, 'bytes');
+		} else {
+			console.log('⚠️ No new image provided');
 		}
 
 		try {
+			console.log('📤 Sending PUT request to /carousel/' + id);
 			const { data } = await API.put(`/carousel/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
 			});
+			console.log('📥 Received response from server:', data);
 			return data;
 		} catch (error: any) {
 			if (error.response?.status === 404) {
+				console.error('❌ Carousel item not found (404)');
 				throw new CarouselApiError("Carousel item not found", 404);
 			}
-			console.error(`Error updating carousel item with id ${id}:`, error);
+			console.error(`❌ Error updating carousel item with id ${id}:`, error);
+			console.error('Response data:', error.response?.data);
+			console.error('Response status:', error.response?.status);
 			throw new CarouselApiError("Failed to update carousel item", 500);
 		}
 	},

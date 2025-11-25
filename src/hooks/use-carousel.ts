@@ -51,22 +51,34 @@ export function useCarousel() {
 	}, []);
 
 	const updateItem = React.useCallback(async (id: number, data: any) => {
+		console.log('🔧 useCarousel.updateItem called:', { id, data });
 		setIsLoading(true);
 		setError(null);
 		try {
+			console.log('📡 Calling carouselApi.update...');
 			const updatedItem = await carouselApi.update(id, data);
+			console.log('📦 Received updated item from API:', updatedItem);
+			
 			// Добавляем timestamp к imageUrl чтобы избежать кэширования
 			if (updatedItem.imageUrl) {
+				const oldUrl = updatedItem.imageUrl;
 				updatedItem.imageUrl = `${updatedItem.imageUrl}?t=${Date.now()}`;
+				console.log('🔄 Added cache-busting timestamp:', { oldUrl, newUrl: updatedItem.imageUrl });
 			}
+			
 			setItems((prev) => prev.map((item) => (item.id === id ? updatedItem : item)));
+			console.log('💾 Updated items in state');
+			
 			// Перезагружаем все элементы чтобы обновить кэш
+			console.log('🔄 Fetching all items to refresh cache...');
 			await fetchItems();
+			console.log('✅ Items refreshed successfully');
+			
 			return updatedItem;
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : "Failed to update carousel item";
 			setError(errorMessage);
-			console.error("Error updating carousel item:", err);
+			console.error("❌ Error updating carousel item:", err);
 			throw new Error(errorMessage);
 		} finally {
 			setIsLoading(false);

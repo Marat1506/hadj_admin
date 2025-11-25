@@ -112,22 +112,41 @@ export function CarouselForm({ open, onClose, item, onSuccess }: CarouselFormPro
     setIsLoading(true);
     try {
       if (item) {
-        await updateItem(item.id, {
+        console.log('🔄 Updating carousel item:', {
+          id: item.id,
+          title,
+          link: link.trim() || undefined,
+          hasNewImage: !!image,
+          imageName: image?.name,
+        });
+        
+        const result = await updateItem(item.id, {
           title,
           link: link.trim() || undefined,
           image: image || undefined,
         });
+        
+        console.log('✅ Update successful:', result);
       } else {
-        await createItem({
+        console.log('➕ Creating new carousel item:', {
+          title,
+          link: link.trim() || undefined,
+          hasImage: !!image,
+          imageName: image?.name,
+        });
+        
+        const result = await createItem({
           title,
           link: link.trim() || undefined,
           photo: image!,
         });
+        
+        console.log('✅ Create successful:', result);
       }
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error("Error saving carousel item:", error);
+      console.error("❌ Error saving carousel item:", error);
       setErrors({
         title: "Произошла ошибка при сохранении. Пожалуйста, попробуйте снова.",
       });
