@@ -28,9 +28,11 @@ interface GuideContentFormProps {
 	onClose: () => void;
 	item?: any;
 	onSuccess?: () => void;
+	preselectedCategoryId?: number;
+	preselectedSubcategoryId?: number;
 }
 
-export function GuideContentForm({ open, onClose, item, onSuccess }: GuideContentFormProps): React.JSX.Element {
+export function GuideContentForm({ open, onClose, item, onSuccess, preselectedCategoryId, preselectedSubcategoryId }: GuideContentFormProps): React.JSX.Element {
 	const { createItem, updateItem } = useGuideContent();
 	const { items: categories } = useGuideCategories();
 	const { items: subcategories } = useGuideSubcategories();
@@ -76,15 +78,16 @@ export function GuideContentForm({ open, onClose, item, onSuccess }: GuideConten
 			} else {
 				setTitle("");
 				setDescription("");
-				setCategoryId("");
-				setSubcategoryId("");
+				// Используем предзаполненные значения если они переданы
+				setCategoryId(preselectedCategoryId?.toString() || "");
+				setSubcategoryId(preselectedSubcategoryId?.toString() || "");
 				setMediaType('image');
 				setPreviewSrc(null);
 			}
 			setMediaFile(null);
 			setErrors({});
 		}
-	}, [open, item]);
+	}, [open, item, preselectedCategoryId, preselectedSubcategoryId]);
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];

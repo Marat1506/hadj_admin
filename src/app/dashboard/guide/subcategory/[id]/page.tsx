@@ -199,6 +199,8 @@ export default function SubcategoryPage({ params }: SubcategoryPageProps): React
           onClose={handleCloseContentForm}
           item={editingContent}
           onSuccess={handleCloseContentForm}
+          preselectedCategoryId={selectedSubcategory?.categoryId}
+          preselectedSubcategoryId={selectedSubcategory?.id}
         />
       )}
 

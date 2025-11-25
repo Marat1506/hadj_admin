@@ -114,9 +114,11 @@ export default function CategoryPage({ params }: CategoryPageProps): React.JSX.E
                     <FolderIcon size={24} />
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="h6" gutterBottom>{subcategory.title}</Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        {subcategory.description || 'Без описания'}
-                      </Typography>
+                      {subcategory.description && (
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                          {subcategory.description}
+                        </Typography>
+                      )}
                       <Typography variant="caption" color="text.secondary">
                         {contentCount} материалов
                       </Typography>
