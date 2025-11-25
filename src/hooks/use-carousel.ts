@@ -55,7 +55,13 @@ export function useCarousel() {
 		setError(null);
 		try {
 			const updatedItem = await carouselApi.update(id, data);
+			// Добавляем timestamp к imageUrl чтобы избежать кэширования
+			if (updatedItem.imageUrl) {
+				updatedItem.imageUrl = `${updatedItem.imageUrl}?t=${Date.now()}`;
+			}
 			setItems((prev) => prev.map((item) => (item.id === id ? updatedItem : item)));
+			// Перезагружаем все элементы чтобы обновить кэш
+			await fetchItems();
 			return updatedItem;
 		} catch (err) {
 			const errorMessage = err instanceof Error ? err.message : "Failed to update carousel item";
@@ -65,7 +71,7 @@ export function useCarousel() {
 		} finally {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [fetchItems]);
 
 	const deleteItem = React.useCallback(async (id: number) => {
 		setIsLoading(true);

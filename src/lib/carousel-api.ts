@@ -34,7 +34,10 @@ class CarouselApiError extends Error {
 export const carouselApi = {
 	async getAll(): Promise<CarouselItem[]> {
 		try {
-			const { data } = await API.get("/carousel");
+			// Добавляем timestamp для предотвращения кэширования
+			const { data } = await API.get("/carousel", {
+				params: { _t: Date.now() }
+			});
 			return data;
 		} catch (error) {
 			console.error("Error fetching carousel data:", error);
