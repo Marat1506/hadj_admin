@@ -5,6 +5,7 @@ interface CarouselItem {
 	title: string;
 	link?: string;
 	image: string;
+	imageUrl?: string;
 	createdAt: string;
 	updatedAt: string;
 }
