@@ -22,6 +22,9 @@ export function useGuideContent() {
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
+    if (data.article) {
+      formData.append('article', data.article);
+    }
     formData.append('categoryId', data.categoryId.toString());
     formData.append('subcategoryId', data.subcategoryId.toString());
     formData.append('mediaType', data.mediaType);
@@ -29,8 +32,6 @@ export function useGuideContent() {
     if (data.media) {
       formData.append('media', data.media);
     }
-    
-
     
     const result = await guideContentApi.create(formData);
     await fetchItems();
@@ -41,6 +42,9 @@ export function useGuideContent() {
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
+    if (data.article) {
+      formData.append('article', data.article);
+    }
     formData.append('categoryId', data.categoryId.toString());
     formData.append('subcategoryId', data.subcategoryId.toString());
     formData.append('mediaType', data.mediaType);
